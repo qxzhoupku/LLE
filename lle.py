@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
+from scipy.ndimage import gaussian_filter1d
 from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag # type: ignore
 
 # import sys
@@ -17,7 +18,10 @@ if not os.path.exists(output_path):
 os.chdir(output_path)
 
 def noise(mode_number):
-    return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
+    white_noise = np.random.normal(scale=0.1, size=mode_number)
+    smooth_noise = gaussian_filter1d(white_noise, sigma=10)
+    return smooth_noise
+    # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
 
 # fft = lambda x: np.fft.fftshift(np.fft.fft(x))
 # ifft = lambda x: np.fft.ifft(np.fft.ifftshift(x))
@@ -27,17 +31,16 @@ def cal_power(x):
     mode_number = len(x)
     return np.sum(np.abs(x)**2) / mode_number
 
-# @jit(nopython=True)
 def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0):
     B_avg_pow = cal_power(B)
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fftshift(np.fft.fft(A_1))
     A_2_freq = np.exp(-(1 + J_back_r + 1j * zeta + 1j * D_int) * delta_t) * A_1_freq
-    # A_2_freq += noise(mode_number) * delta_t
+    A_2_freq += noise(mode_number) * delta_t * 1000
     A_2 = np.fft.ifft(np.fft.ifftshift(A_2_freq))
     A_3 = A_2 + f * delta_t
-    # backscattering term from backwards mode
-    A_4 = A_3 + 1j * J_back_r * delta_t * B[::-1]
+    A_4 = A_3 + 1j * J_back_r * delta_t * B[::-1] # backscattering term from backwards mode
+    # A_4 += noise(mode_number) * delta_t * 10
     return A_4
 
 def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq):
