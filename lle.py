@@ -16,7 +16,7 @@ if not os.path.exists("../output"):
 os.chdir("../output")
 
 
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, loss_back, r_back, t_back, delta_t, D_int, time_str, plot_flag # type: ignore
+from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag # type: ignore
 
 
 # plt.plot(D_int)
@@ -56,7 +56,7 @@ def cal_power(x):
     return np.sum(np.abs(x)**2) / mode_number
 
 
-def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r = 0, r_back = 0):
+def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r = 0):
     B_avg_pow = cal_power(B)
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fftshift(np.fft.fft(A_1))
@@ -107,8 +107,8 @@ print("Start main loop")
 # for i in range(iter_number):
 for i in tqdm(range(iter_number), desc="Processing"):
     zeta = zetas[i]
-    A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r, r_back)
-    B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r, r_back)
+    A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r)
+    B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r)
     A, B = A_new, B_new
     record_power_A[i] = cal_power(A)
     record_power_B[i] = cal_power(B)
