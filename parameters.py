@@ -7,15 +7,15 @@ iter_number = 10**7
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
-zeta_ini = -50
-zeta_end = 50
+zeta_ini = -5 - 0.001
+zeta_end = +5 + 0.001
 zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 
 f_A = 3
 f_B = 0
 J_back_r = 2.85
-loss_back = 1
-r_back = loss_back * J_back_r**0.5; t_back = loss_back * (1 - J_back_r)**0.5
+# loss_back = 1
+# r_back = loss_back * J_back_r**0.5; t_back = loss_back * (1 - J_back_r)**0.5
 delta_t = 0.0001
 
 D_int = np.zeros(mode_number, dtype=np.complex128)
@@ -35,4 +35,5 @@ with open(f"{time_str}.txt", 'w') as file:
         if not var.startswith("__") and not var.startswith("_"):
             file.write(f"{var} = {eval(var)}\n")
 
+# plot_flag = True
 plot_flag = False
