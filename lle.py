@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
+import cProfile
 from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag # type: ignore
 
 # import sys
@@ -83,23 +84,28 @@ if plot_flag:
 
 ################
 # Main loop
-print("Start main loop")
-for i in tqdm(range(iter_number), desc="Processing"):
-    zeta = zetas[i]
-    A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r)
-    B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r)
-    A, B = A_new, B_new
-    record_power_A[i] = cal_power(A)
-    record_power_B[i] = cal_power(B)
+def main_loop(iter_number=iter_number, plot_interval=plot_interval, record_interval=record_interval,zetas=zetas, A=A, B=B, f_A=f_A, f_B=f_B, D_int=D_int, delta_t=delta_t, J_back_r=J_back_r):
 
-    if i % record_interval == 0:
-        record_waveform_A[i // record_interval] = A
-        record_waveform_B[i // record_interval] = B
+    for i in tqdm(range(iter_number), desc="Processing"):
+        zeta = zetas[i]
+        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r)
+        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r)
+        A, B = A_new, B_new
+        record_power_A[i] = cal_power(A)
+        record_power_B[i] = cal_power(B)
 
-    if i % plot_interval == 0 and plot_flag == True:
-        figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
+        if i % record_interval == 0:
+            record_waveform_A[i // record_interval] = A
+            record_waveform_B[i // record_interval] = B
+
+        if i % plot_interval == 0 and plot_flag == True:
+            figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
 ################
+
+print("Start main loop")
+cProfile.run("main_loop()", f"{time_str}_profile.prof")
 print("End main loop")
+
 plt.ioff()
 
 # store D_int
