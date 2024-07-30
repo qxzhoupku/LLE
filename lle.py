@@ -103,7 +103,7 @@ def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B
 
 print("Start main loop")
 if cProfile_test:
-    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)", f"{time_str}_profile")
+    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)", f"{time_str}_profile.prof")
 else:
     main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)
 print("End main loop")
