@@ -85,7 +85,6 @@ if plot_flag:
 ################
 # Main loop
 def main_loop(iter_number=iter_number, plot_interval=plot_interval, record_interval=record_interval,zetas=zetas, A=A, B=B, f_A=f_A, f_B=f_B, D_int=D_int, delta_t=delta_t, J_back_r=J_back_r):
-
     for i in tqdm(range(iter_number), desc="Processing"):
         zeta = zetas[i]
         A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r)
