@@ -110,6 +110,7 @@ plt.figure()
 plt.plot(zetas, record_power_A, label='Power A')
 plt.plot(zetas, record_power_B, label='Power B')
 plt.xlim(zeta_ini, zeta_end)
+plt.title("Power")
 plt.legend()
 plt.savefig(f"{time_str}_power.png", dpi=600)
 
