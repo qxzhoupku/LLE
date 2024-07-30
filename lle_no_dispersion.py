@@ -1,5 +1,5 @@
 import numpy as np
-# from numba import jit
+from numba import jit
 import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
@@ -26,11 +26,12 @@ def noise(mode_number):
 # fft = lambda x: np.fft.fftshift(np.fft.fft(x))
 # ifft = lambda x: np.fft.ifft(np.fft.ifftshift(x))
 
-# @jit(nopython=True)
+@jit(nopython=True)
 def cal_power(x):
     mode_number = len(x)
     return np.sum(np.abs(x)**2) / mode_number
 
+@jit(nopython=True)
 def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0):
     B_avg_pow = cal_power(B)
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
