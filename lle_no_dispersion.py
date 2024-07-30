@@ -5,7 +5,7 @@ import os
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag # type: ignore
+from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag, cProfile_test # type: ignore
 
 # import sys
 # import time
@@ -100,8 +100,10 @@ def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B
 ################
 
 print("Start main loop")
-cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)", f"{time_str}_profile")
-# main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)
+if cProfile_test:
+    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)", f"{time_str}_profile")
+else:
+    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)
 print("End main loop")
 
 plt.ioff()
