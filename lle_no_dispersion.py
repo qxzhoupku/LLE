@@ -5,7 +5,7 @@ import os
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag, cProfile_test # type: ignore
+from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, plot_flag, cProfile_test, noise_flag # type: ignore
 
 # import sys
 # import time
@@ -20,6 +20,7 @@ os.chdir(output_path)
 
 def noise(mode_number):
     white_noise = np.random.normal(scale=0.1, size=mode_number)
+    return white_noise
     smooth_noise = gaussian_filter1d(white_noise, sigma=10)
     return smooth_noise
     # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
@@ -33,11 +34,12 @@ def cal_power(x):
     return np.sum(np.abs(x)**2) / mode_number
 
 @jit(nopython=True)
-def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0):
+def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0, noise_flag=False):
     B_avg_pow = cal_power(B)
     A_3 = np.exp((-(1 + J_back_r) + 1j * (-zeta + np.abs(A_0)**2 + B_avg_pow)) * delta_t) * A_0 + f * delta_t
     A_4 = A_3 + 1j * J_back_r * delta_t * B[::-1] # backscattering term from backwards mode
-    # A_4 += noise(mode_number) * delta_t * 10
+    if noise_flag:
+        A_4 += noise(mode_number) * delta_t * 1
     return A_4
 
 def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq):
@@ -80,11 +82,11 @@ if plot_flag:
 
 ################
 # Main loop
-def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r):
+def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag):
     for i in tqdm(range(iter_number), desc="Processing"):
         zeta = zetas[i]
-        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r)
-        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r)
+        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r, noise_flag)
+        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r, noise_flag)
         A, B = A_new, B_new
         record_power_A[i] = cal_power(A)
         record_power_B[i] = cal_power(B)
@@ -99,9 +101,9 @@ def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B
 
 print("Start main loop")
 if cProfile_test:
-    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)", f"{time_str}_profile.prof")
+    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag)", f"{time_str}_profile.prof")
 else:
-    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r)
+    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag)
 print("End main loop")
 
 plt.ioff()
