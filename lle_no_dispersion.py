@@ -80,10 +80,10 @@ if plot_flag:
     line_A_freq, = ax_freq.plot(xs_freq, np.abs(A_freq))
     line_B_freq, = ax_freq.plot(xs_freq, np.abs(B_freq))
 
+################
+# Main loop
 def main_loop(iter_number=iter_number, plot_interval=plot_interval, record_interval=record_interval,zetas=zetas, A=A, B=B, f_A=f_A, f_B=f_B, D_int=D_int, delta_t=delta_t, J_back_r=J_back_r):
-    ################
-    # Main loop
-    print("Start main loop")
+
     for i in tqdm(range(iter_number), desc="Processing"):
         zeta = zetas[i]
         A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r)
@@ -98,13 +98,13 @@ def main_loop(iter_number=iter_number, plot_interval=plot_interval, record_inter
 
         if i % plot_interval == 0 and plot_flag == True:
             figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
-    print("End main loop")
-    ################
+################
 
+print("Start main loop")
 cProfile.run("main_loop()", f"{time_str}_profile.prof")
+print("End main loop")
 
 plt.ioff()
-
 
 # store D_int
 np.savetxt(f"{time_str}_D_int.txt", D_int)
