@@ -19,7 +19,8 @@ if not os.path.exists(output_path):
 os.chdir(output_path)
 
 def noise(mode_number):
-    white_noise = np.random.normal(scale=0.1, size=mode_number)
+    white_noise = np.random.randn(mode_number)
+    # white_noise = np.random.normal(scale=0.1, size=mode_number)
     return white_noise
     smooth_noise = gaussian_filter1d(white_noise, sigma=10)
     return smooth_noise
@@ -38,12 +39,12 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0, noise_flag=False):
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fftshift(np.fft.fft(A_1))
     A_2_freq = np.exp(-(1 + J_back_r + 1j * zeta + 1j * D_int) * delta_t) * A_1_freq
-    if noise_flag:
-        A_2_freq += noise(mode_number) * 0.01
+    # A_2_freq += noise(mode_number) * 0.01
     A_2 = np.fft.ifft(np.fft.ifftshift(A_2_freq))
     A_3 = A_2 + f * delta_t
-    A_4 = A_3 + 1j * J_back_r * delta_t * B[::-1] # backscattering term from backwards mode
-    # A_4 += noise(mode_number) * delta_t * 1
+    A_4 = A_3 + 1j * (1 - np.exp(-J_back_r * delta_t)) * B[::-1] # backscattering term from backwards mode
+    if noise_flag:
+        A_4 += noise(mode_number) * 0.001
     return A_4
 
 def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq):
@@ -51,7 +52,7 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
     line_B.set_ydata(np.abs(B))
     y_max = np.max([np.max(np.abs(A)), np.max(line_A.get_ydata())])
     ax.set_ylim(0, 1.2 * y_max)
-    ax.title.set_text(f"zeta = {zeta:.2f}, proc = {i / iter_number * 100:.2f}%, f_A = {f_A}")
+    ax.title.set_text(f"zeta = {zeta:.2f}, proc = {i / iter_number * 100:.2f}%, f_A = {f_A}, J = {J_back_r}")
 
     A_freq = np.fft.fftshift(np.fft.fft(A))
     B_freq = np.fft.fftshift(np.fft.fft(B))
@@ -64,10 +65,10 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
     fig.canvas.flush_events()
 
 # Initialization
-A_freq = noise(mode_number)
-B_freq = noise(mode_number)
-A = np.fft.ifft(np.fft.ifftshift(A_freq))
-B = np.fft.ifft(np.fft.ifftshift(B_freq))
+A = noise(mode_number)
+B = noise(mode_number)
+A_freq = np.fft.fftshift(np.fft.fft(A))
+B_freq = np.fft.fftshift(np.fft.fft(B))
 
 record_power_A = np.zeros(iter_number)
 record_power_B = np.zeros(iter_number)
