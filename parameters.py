@@ -3,12 +3,12 @@ import os
 import time
 
 mode_number = 2**8
-iter_number = 10**5
+iter_number = 10**7
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
-zeta_ini = -0.6 - 0.0001
-zeta_end = -0.4 + 0.0001
+zeta_ini = -0.55 - 0.0001
+zeta_end = -0.45 + 0.0001
 zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 
 f_A = 9
@@ -36,6 +36,8 @@ with open(f"{time_str}.txt", 'w') as file:
         if not var.startswith("__") and not var.startswith("_"):
             # print(var)
             file.write(f"{var} = {eval(var)}\n")
+
+print(time_str)
 
 plot_flag = True
 # plot_flag = False
