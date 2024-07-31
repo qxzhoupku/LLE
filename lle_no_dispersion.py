@@ -47,7 +47,7 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
     line_B.set_ydata(np.abs(B))
     y_max = np.max([np.max(np.abs(A)), np.max(line_A.get_ydata())])
     ax.set_ylim(0, 1.2 * y_max)
-    ax.title.set_text(f"zeta = {zeta:.2f}, proc = {i / iter_number * 100:.2f}%")
+    ax.title.set_text(f"zeta = {zeta:.2f}, proc = {i / iter_number * 100:.2f}%, f_A = {f_A}")
 
     A_freq = np.fft.fftshift(np.fft.fft(A))
     B_freq = np.fft.fftshift(np.fft.fft(B))
