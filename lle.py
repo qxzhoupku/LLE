@@ -44,7 +44,7 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0, noise_flag=False):
     A_3 = A_2 + f * delta_t
     A_4 = A_3 + 1j * (1 - np.exp(-J_back_r * delta_t)) * B[::-1] # backscattering term from backwards mode
     if noise_flag:
-        A_4 += noise(mode_number) * 0.001
+        A_4 += noise(mode_number) * 0.0001
     return A_4
 
 def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq):
@@ -63,6 +63,12 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
     ax_freq.set_yscale('log')
     fig.canvas.draw()
     fig.canvas.flush_events()
+
+
+
+
+
+
 
 # Initialization
 A = noise(mode_number)
