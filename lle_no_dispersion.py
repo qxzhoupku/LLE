@@ -26,9 +26,6 @@ def noise(mode_number):
     return smooth_noise
     # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
 
-# fft = lambda x: np.fft.fftshift(np.fft.fft(x))
-# ifft = lambda x: np.fft.ifft(np.fft.ifftshift(x))
-
 @jit(nopython=True)
 def cal_power(x):
     mode_number = len(x)
