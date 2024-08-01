@@ -64,8 +64,8 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
 
 
 # Initialization
-A = noise(mode_number)
-B = noise(mode_number)
+A = noise(mode_number) * 0.0001
+B = noise(mode_number) * 0.0001
 A_freq = np.fft.fftshift(np.fft.fft(A))
 B_freq = np.fft.fftshift(np.fft.fft(B))
 
