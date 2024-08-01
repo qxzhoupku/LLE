@@ -3,7 +3,7 @@ import os
 import time
 
 mode_number = 2**10
-iter_number = 10**5
+iter_number = 10**6
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
@@ -27,12 +27,18 @@ D_int = np.fft.ifftshift(D_int)
 
 time_str = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
 
+random_seed = np.random.randint(0, 2**32)
+np.random.seed(random_seed)
+
+
 # plot_flag = True
 plot_flag = False
 # cProfile_test = True
 cProfile_test = False
 # noise_flag = True
 noise_flag = False
+
+
 
 os.chdir(os.path.dirname(__file__))
 os.chdir("../output")
