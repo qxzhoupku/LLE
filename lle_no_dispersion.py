@@ -20,7 +20,7 @@ os.chdir(output_path)
 
 @jit(nopython=True)
 def noise(mode_number):
-    white_noise = np.random.randn(mode_number)
+    white_noise = np.random.randn(mode_number) + 1j * np.random.randn(mode_number)
     # white_noise = np.random.normal(scale=0.1, size=mode_number)
     return white_noise
     smooth_noise = gaussian_filter1d(white_noise, sigma=10)
