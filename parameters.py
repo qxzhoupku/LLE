@@ -7,8 +7,8 @@ iter_number = 10**6
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
-zeta_ini = -15 - 0.0001
-zeta_end = +20 + 0.0001
+zeta_ini = -0.5 - 0.0001
+zeta_end = +0.5 + 0.0001
 zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 
 f_A = 3
@@ -31,12 +31,12 @@ random_seed = np.random.randint(0, 2**32)
 np.random.seed(random_seed)
 
 
-# plot_flag = True
 plot_flag = False
-# cProfile_test = True
+# plot_flag = True
 cProfile_test = False
-# noise_flag = True
+# cProfile_test = True
 noise_flag = False
+# noise_flag = True
 
 
 
