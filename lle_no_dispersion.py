@@ -18,6 +18,7 @@ if not os.path.exists(output_path):
     os.mkdir(output_path)
 os.chdir(output_path)
 
+@jit(nopython=True)
 def noise(mode_number):
     white_noise = np.random.randn(mode_number)
     # white_noise = np.random.normal(scale=0.1, size=mode_number)
