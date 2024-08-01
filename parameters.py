@@ -3,17 +3,17 @@ import os
 import time
 
 mode_number = 2**10
-iter_number = 10**6
+iter_number = 10**5
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
 zeta_ini = -15 - 0.0001
-zeta_end = +45 + 0.0001
+zeta_end = +20 + 0.0001
 zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 
 f_A = 3
 f_B = 0
-J_back_r = 0
+J_back_r = 2.85
 # loss_back = 1
 # r_back = loss_back * J_back_r**0.5; t_back = loss_back * (1 - J_back_r)**0.5
 delta_t = 0.0001 # commonly used time step
@@ -27,6 +27,12 @@ D_int = np.fft.ifftshift(D_int)
 
 time_str = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
 
+# plot_flag = True
+plot_flag = False
+# cProfile_test = True
+cProfile_test = False
+# noise_flag = True
+noise_flag = False
 
 os.chdir(os.path.dirname(__file__))
 os.chdir("../output")
@@ -40,10 +46,3 @@ with open(f"{time_str}.txt", 'w') as file:
             file.write(f"{var} = {eval(var)}\n")
 
 print(time_str)
-
-# plot_flag = True
-plot_flag = False
-# cProfile_test = True
-cProfile_test = False
-# noise_flag = True
-noise_flag = False
