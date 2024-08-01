@@ -35,11 +35,11 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0, noise_flag=False):
     B_avg_pow = cal_power(B)
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fft(A_1)
-    A_2_freq = np.exp(-(1 + J_back_r + 1j * zeta + 1j * D_int) * delta_t) * A_1_freq
+    A_2_freq = np.exp(-(1 + 1j * zeta + 1j * D_int) * delta_t) * A_1_freq
     # A_2_freq += noise(mode_number) * 0.01
     A_2 = np.fft.ifft(A_2_freq)
     A_3 = A_2 + f * delta_t
-    A_4 = A_3 + 1j * np.sqrt(2 * J_back_r * delta_t) * B # backscattering term from backwards mode
+    A_4 = A_3 + 1j * J_back_r * delta_t * B # backscattering term from backwards mode
     if noise_flag:
         A_4 += noise(mode_number) * 0.0001
     return A_4
