@@ -58,6 +58,10 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
     y_freq_max = np.max(np.abs(A_freq))
     ax_freq.set_ylim(np.min(np.abs(A_freq)), 1.2 * y_freq_max)
     ax_freq.set_yscale('log')
+
+    line_A_phase.set_ydata(np.angle(A))
+    line_B_phase.set_ydata(np.angle(B))
+
     fig.canvas.draw()
     fig.canvas.flush_events()
 
@@ -80,13 +84,17 @@ record_waveform_B = np.zeros((iter_number // record_interval, mode_number), dtyp
 
 if plot_flag:
     plt.ion()
-    fig, axs = plt.subplots(2)
-    ax, ax_freq = axs[0], axs[1]
+    fig, axs = plt.subplots(4)
+    fig.set_size_inches(5, 7)
+    # fig.canvas.manager.window.resizable(True, True)
+    ax, ax_freq, ax_phase_A, ax_phase_B = axs[0], axs[1], axs[2], axs[3]
     line_A, = ax.plot(np.abs(A))
     line_B, = ax.plot(np.abs(B))
     xs_freq = np.arange(-mode_number / 2, mode_number / 2)
     line_A_freq, = ax_freq.plot(xs_freq, np.abs(A_freq))
     line_B_freq, = ax_freq.plot(xs_freq, np.abs(B_freq))
+    line_A_phase, = ax_phase_A.plot(np.angle(A))
+    line_B_phase, = ax_phase_B.plot(np.angle(B))
 
 ################
 # Main loop
