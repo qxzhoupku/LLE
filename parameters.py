@@ -2,7 +2,7 @@ import numpy as np
 import os
 import time
 
-mode_number = 2**10
+mode_number = 2**8
 iter_number = 10**7
 plot_interval = 5000
 record_interval = iter_number // 10000
@@ -14,7 +14,7 @@ zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 f_A = 3
 f_B = 0
 delta_t = 1e-4 # commonly used time step
-delta_t = 1e-6
+delta_t = 1e-5
 J_back_r = 2.85
 
 
@@ -27,13 +27,13 @@ D_int = np.fft.ifftshift(D_int)
 time_str = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
 
 random_seed = np.random.randint(0, 2**32)
-np.random.seed(random_seed)
+rng = np.random.default_rng(random_seed)
 
 
 plot_flag = False
 # plot_flag = True
 cProfile_test = False
-# cProfile_test = True
+cProfile_test = True
 noise_flag = False
 noise_flag = True
 
