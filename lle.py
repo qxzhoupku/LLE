@@ -30,8 +30,7 @@ def cal_power(x):
     mode_number = len(x)
     return np.sum(np.abs(x)**2) / mode_number
 
-def split_step(A_0, zeta, f, D_int, delta_t, B, J_back_r=0, noise_flag=False, rng = rng):
-    B_avg_pow = cal_power(B)
+def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_flag=False, rng = rng):
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fft(A_1)
     A_2_freq = np.exp(-(1 + 1j * zeta + 1j * D_int) * delta_t) * A_1_freq
@@ -99,11 +98,13 @@ if plot_flag:
 def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng):
     for i in tqdm(range(iter_number), desc="Processing"):
         zeta = zetas[i]
-        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, J_back_r, noise_flag, rng)
-        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, J_back_r, noise_flag, rng)
+        power_A = cal_power(A)
+        power_B = cal_power(B)
+        record_power_A[i] = power_A
+        record_power_B[i] = power_B
+        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, power_B, J_back_r, noise_flag, rng)
+        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, power_A, J_back_r, noise_flag, rng)
         A, B = A_new, B_new
-        record_power_A[i] = cal_power(A)
-        record_power_B[i] = cal_power(B)
 
         if i % record_interval == 0:
             record_waveform_A[i // record_interval] = A
