@@ -121,10 +121,10 @@ np.savetxt(f"{time_str}_D_int.txt", D_int)
 
 # Plot power
 plt.figure()
-plt.plot(zetas, record_power_A, label='Power A')
-plt.plot(zetas, record_power_B, label='Power B')
+plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}')
+plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}')
 plt.xlim(zeta_ini, zeta_end)
-plt.title("Power")
+plt.title(f"Power, J = {J_back_r}")
 plt.xlabel("detuning")
 plt.legend()
 plt.savefig(f"{time_str}_power.png", dpi=600)
