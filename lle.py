@@ -1,5 +1,5 @@
 import numpy as np
-# from numba import jit
+from numba import jit
 import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
@@ -25,7 +25,7 @@ def noise(mode_number, rng):
     return smooth_noise
     # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
 
-# @jit(nopython=True)
+@jit(nopython=True)
 def cal_power(x):
     mode_number = len(x)
     return np.sum(np.abs(x)**2) / mode_number
