@@ -34,13 +34,8 @@ random_seed = np.random.randint(0, 2**32)
 rng = np.random.default_rng(random_seed)
 
 
-plot_flag = False
-# plot_flag = True
-cProfile_test = False
-# cProfile_test = True
 noise_flag = False
 # noise_flag = True
-
 
 
 os.chdir(os.path.dirname(__file__))
@@ -55,15 +50,6 @@ with open(f"{time_str}.txt", 'w') as file:
             file.write(f"{var} = {eval(var)}\n")
 
 print(time_str)
-
-
-# Change directory to output folder
-current_path = os.path.abspath(__file__)
-os.chdir(os.path.dirname(current_path))
-output_path = "../output"
-if not os.path.exists(output_path):
-    os.mkdir(output_path)
-os.chdir(output_path)
 
 
 @jit(nopython=True)
@@ -126,10 +112,7 @@ record_waveform_B = np.zeros((iter_number // record_interval, mode_number), dtyp
 
 
 print("Start main loop")
-if cProfile_test:
-    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)", f"{time_str}_profile.prof")
-else:
-    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)
+main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)
 print("End main loop")
 
 # store D_int
