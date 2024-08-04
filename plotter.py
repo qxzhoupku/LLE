@@ -12,7 +12,7 @@ def result_plot(record_power_A, record_power_B, record_waveform_A, record_wavefo
     plt.xlim(zeta_ini, zeta_end)
     plt.title(f"Power, J = {J_back_r}")
     plt.xlabel("detuning")
-    plt.legend()
+    plt.legend(loc = "lower left")
     plt.savefig(f"{time_str}_power.png", dpi=600)
 
     # Plot waveform heatmap
