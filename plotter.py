@@ -5,15 +5,18 @@ import matplotlib.pyplot as plt
 
 
 def result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end):
+    iter_number = len(zetas)
+    power_interval = max(iter_number // 10000000, 1)
     # Plot power
     plt.figure()
-    plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}', alpha = 0.7)
-    plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}', alpha = 0.7)
+    plt.plot(zetas[::power_interval], record_power_A[::power_interval], label=f'Power A, f_A = {f_A}', alpha = 0.7)
+    plt.plot(zetas[::power_interval], record_power_B[::power_interval], label=f'Power B, f_B = {f_B}', alpha = 0.7)
     plt.xlim(zeta_ini, zeta_end)
     plt.title(f"Power, J = {J_back_r}")
     plt.xlabel("detuning")
     plt.legend(loc = "lower left")
     plt.savefig(f"{time_str}_power.png", dpi=600)
+    print("Power saved")
 
     # Plot waveform heatmap
     record_freq_A = np.fft.fftshift(np.fft.fft(record_waveform_A, axis=1), axes=1)
