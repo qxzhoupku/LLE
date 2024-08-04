@@ -97,10 +97,3 @@ os.chdir("../output")
 
 result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end)
 
-# delete cache files
-os.chdir("../cache")
-os.remove(f"{time_str}_record_power_A.npy")
-os.remove(f"{time_str}_record_power_B.npy")
-os.remove(f"{time_str}_record_waveform_A.npy")
-os.remove(f"{time_str}_record_waveform_B.npy")
-os.remove(f"{time_str}_zetas.npy")
