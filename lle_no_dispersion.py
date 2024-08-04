@@ -23,9 +23,9 @@ os.chdir(output_path)
 def noise(mode_number, rng):
     white_noise = rng.standard_normal(mode_number) + 1j * rng.standard_normal(mode_number)
     return white_noise
-    smooth_noise = gaussian_filter1d(white_noise, sigma=10)
-    return smooth_noise
-    # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
+    # smooth_noise = gaussian_filter1d(white_noise, sigma=10)
+    # return smooth_noise
+    # # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
 
 
 @jit(nopython=True)
@@ -102,6 +102,27 @@ def result_plot(record_power_A, record_power_B, record_waveform_A, record_wavefo
     # Plot waveform heatmap
     record_freq_A = np.fft.fftshift(np.fft.fft(record_waveform_A, axis=1), axes=1)
     record_freq_B = np.fft.fftshift(np.fft.fft(record_waveform_B, axis=1), axes=1)
+
+    # plot final waveform, with mode number as horizontal axis
+    plt.figure()
+    plt.plot(np.abs(record_waveform_A[-1]), label = "A", alpha = 0.5)
+    plt.plot(np.abs(record_waveform_B[-1]), label = "B", alpha = 0.5)
+    plt.title("Final Waveform")
+    plt.xlabel("mode number")
+    plt.ylabel("amplitude")
+    plt.savefig(f"{time_str}_final_waveform.png", dpi=600)
+    print("Final Waveform saved")
+
+    # plot final spectrum, with mode number as horizontal axis
+    plt.figure()
+    plt.plot(np.abs(record_freq_A[-1]), label = "A", alpha = 0.5)
+    plt.plot(np.abs(record_freq_B[-1]), label = "B", alpha = 0.5)
+    plt.title("Final Spectrum")
+    plt.xlabel("mode number")
+    plt.ylabel("amplitude")
+    plt.savefig(f"{time_str}_final_spectrum.png", dpi=600)
+    print("Final Spectrum saved")
+
     record_freq_A = record_freq_A.T
     record_freq_B = record_freq_B.T
     record_waveform_A = record_waveform_A.T
