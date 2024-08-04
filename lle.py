@@ -18,6 +18,7 @@ if not os.path.exists(output_path):
     os.mkdir(output_path)
 os.chdir(output_path)
 
+
 def noise(mode_number, rng):
     white_noise = rng.standard_normal(mode_number) + 1j * rng.standard_normal(mode_number)
     return white_noise
@@ -25,10 +26,12 @@ def noise(mode_number, rng):
     return smooth_noise
     # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
 
+
 @jit(nopython=True)
 def cal_power(x):
     mode_number = len(x)
     return np.sum(np.abs(x)**2) / mode_number
+
 
 def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_flag=False, rng = rng):
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
@@ -40,6 +43,7 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
     if noise_flag:
         A_4 += noise(mode_number, rng) * 0.0001
     return A_4
+
 
 def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq):
     line_A.set_ydata(np.abs(A))
@@ -63,6 +67,60 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
     fig.canvas.flush_events()
 
 
+def result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end):
+    # Plot power
+    plt.figure()
+    plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}')
+    plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}')
+    plt.xlim(zeta_ini, zeta_end)
+    plt.title(f"Power, J = {J_back_r}")
+    plt.xlabel("detuning")
+    plt.legend()
+    plt.savefig(f"{time_str}_power.png", dpi=600)
+
+    # Plot waveform heatmap
+    record_freq_A = np.fft.fftshift(np.fft.fft(record_waveform_A, axis=1), axes=1)
+    record_freq_B = np.fft.fftshift(np.fft.fft(record_waveform_B, axis=1), axes=1)
+    record_freq_A = record_freq_A.T
+    record_freq_B = record_freq_B.T
+    record_waveform_A = record_waveform_A.T
+    record_waveform_B = record_waveform_B.T
+
+    plt.figure()
+    plt.imshow(np.abs(record_waveform_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    # plt.colorbar()
+    plt.title("Waveform_A")
+    plt.xlabel("detuning")
+    plt.savefig(f"{time_str}_waveform_A.png", dpi=600)
+    print("Waveform_A saved")
+
+    plt.figure()
+    plt.imshow(np.abs(record_waveform_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    # plt.colorbar()
+    plt.title("Waveform_B")
+    plt.xlabel("detuning")
+    plt.savefig(f"{time_str}_waveform_B.png", dpi=600)
+    print("Waveform_B saved")
+
+    # plot the frequency in a heatmap
+    plt.figure()
+    plt.imshow(np.abs(record_freq_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    # plt.colorbar()
+    plt.title("Frequency_A")
+    plt.xlabel("detuning")
+    plt.savefig(f"{time_str}_frequency_A.png", dpi=600)
+    print("Frequency_A saved")
+
+    plt.figure()
+    plt.imshow(np.abs(record_freq_B), aspect='auto', \
+            extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    # plt.colorbar()
+    plt.title("Frequency_B")
+    plt.xlabel("detuning")
+    plt.savefig(f"{time_str}_frequency_B.png", dpi=600)
+    print("Frequency_B saved")
+
+    # plt.show()
 
 
 
@@ -126,56 +184,5 @@ plt.ioff()
 # store D_int
 np.savetxt(f"{time_str}_D_int.txt", D_int)
 
-# Plot power
-plt.figure()
-plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}')
-plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}')
-plt.xlim(zeta_ini, zeta_end)
-plt.title(f"Power, J = {J_back_r}")
-plt.xlabel("detuning")
-plt.legend()
-plt.savefig(f"{time_str}_power.png", dpi=600)
 
-# Plot waveform heatmap
-record_freq_A = np.fft.fftshift(np.fft.fft(record_waveform_A, axis=1), axes=1)
-record_freq_B = np.fft.fftshift(np.fft.fft(record_waveform_B, axis=1), axes=1)
-record_freq_A = record_freq_A.T
-record_freq_B = record_freq_B.T
-record_waveform_A = record_waveform_A.T
-record_waveform_B = record_waveform_B.T
-
-plt.figure()
-plt.imshow(np.abs(record_waveform_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-# plt.colorbar()
-plt.title("Waveform_A")
-plt.xlabel("detuning")
-plt.savefig(f"{time_str}_waveform_A.png", dpi=600)
-print("Waveform_A saved")
-
-plt.figure()
-plt.imshow(np.abs(record_waveform_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-# plt.colorbar()
-plt.title("Waveform_B")
-plt.xlabel("detuning")
-plt.savefig(f"{time_str}_waveform_B.png", dpi=600)
-print("Waveform_B saved")
-
-# plot the frequency in a heatmap
-plt.figure()
-plt.imshow(np.abs(record_freq_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-# plt.colorbar()
-plt.title("Frequency_A")
-plt.xlabel("detuning")
-plt.savefig(f"{time_str}_frequency_A.png", dpi=600)
-print("Frequency_A saved")
-
-plt.figure()
-plt.imshow(np.abs(record_freq_B), aspect='auto', \
-           extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-# plt.colorbar()
-plt.title("Frequency_B")
-plt.xlabel("detuning")
-plt.savefig(f"{time_str}_frequency_B.png", dpi=600)
-print("Frequency_B saved")
-
-# plt.show()
+result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end)
