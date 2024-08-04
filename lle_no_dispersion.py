@@ -64,7 +64,7 @@ def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B
             record_waveform_A[i // record_interval] = A
             record_waveform_B[i // record_interval] = B
 
-        if i % plot_interval == 0 and plot_flag == True:
+        if plot_flag == True and i % plot_interval == 0:
             with objmode():
                 figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
 ################

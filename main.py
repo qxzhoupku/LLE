@@ -5,5 +5,5 @@ import time
 
 for i in range(4):
     os.system("python lle.py &")
-    time.sleep(1.2)
+    time.sleep(20)
 
