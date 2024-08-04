@@ -2,7 +2,6 @@ import numpy as np
 from numba import jit, objmode
 import os
 from scipy.ndimage import gaussian_filter1d
-import cProfile
 import time
 
 
@@ -80,7 +79,7 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
 ################
 # Main loop
 @jit(nopython=True)
-def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B):
+def main_loop(iter_number, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B):
     for i in range(iter_number):
         zeta = zetas[i]
         power_A = cal_power(A)
@@ -112,7 +111,7 @@ record_waveform_B = np.zeros((iter_number // record_interval, mode_number), dtyp
 
 
 print("Start main loop")
-main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)
+main_loop(iter_number, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)
 print("End main loop")
 
 # store D_int
