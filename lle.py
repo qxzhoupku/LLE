@@ -1,5 +1,5 @@
 import numpy as np
-from numba import jit
+from numba import jit, objmode
 import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
@@ -19,6 +19,7 @@ if not os.path.exists(output_path):
 os.chdir(output_path)
 
 
+@jit(nopython=True)
 def noise(mode_number, rng):
     white_noise = rng.standard_normal(mode_number) + 1j * rng.standard_normal(mode_number)
     return white_noise
@@ -33,6 +34,7 @@ def cal_power(x):
     return np.sum(np.abs(x)**2) / mode_number
 
 
+@jit(nopython=True)
 def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_flag=False, rng = rng):
     A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fft(A_1)
@@ -47,8 +49,10 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
 
 ################
 # Main loop
-def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng):
-    for i in tqdm(range(iter_number), desc="Processing"):
+@jit(nopython=True)
+def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B):
+    # for i in tqdm(range(iter_number), desc="Processing"):
+    for i in range(iter_number):
         zeta = zetas[i]
         power_A = cal_power(A)
         power_B = cal_power(B)
@@ -63,7 +67,8 @@ def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B
             record_waveform_B[i // record_interval] = B
 
         if i % plot_interval == 0 and plot_flag == True:
-            figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
+            with objmode():
+                figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
 ################
 
 
@@ -195,9 +200,9 @@ if plot_flag:
 
 print("Start main loop")
 if cProfile_test:
-    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng)", f"{time_str}_profile.prof")
+    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)", f"{time_str}_profile.prof")
 else:
-    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng)
+    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)
 print("End main loop")
 
 plt.ioff()

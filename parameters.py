@@ -3,12 +3,12 @@ import os
 import time
 
 mode_number = 2**8
-iter_number = 10**7
+iter_number = 10**8
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
-zeta_ini = -0.5 - 0.0001
-zeta_end = -0.5 + 0.0001
+zeta_ini = +5.0 - 0.0001
+zeta_end = +10.0 + 0.0001
 zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 
 f_A = 3
@@ -33,9 +33,9 @@ rng = np.random.default_rng(random_seed)
 plot_flag = False
 # plot_flag = True
 cProfile_test = False
-cProfile_test = True
+# cProfile_test = True
 noise_flag = False
-noise_flag = True
+# noise_flag = True
 
 
 
