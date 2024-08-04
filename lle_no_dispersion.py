@@ -94,8 +94,8 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
 def result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end):
     # Plot power
     plt.figure()
-    plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}')
-    plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}')
+    plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}', alpha = 0.7)
+    plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}', alpha = 0.7)
     plt.xlim(zeta_ini, zeta_end)
     plt.title(f"Power, J = {J_back_r}")
     plt.xlabel("detuning")
@@ -108,8 +108,8 @@ def result_plot(record_power_A, record_power_B, record_waveform_A, record_wavefo
 
     # plot final waveform, with mode number as horizontal axis
     plt.figure()
-    plt.plot(np.abs(record_waveform_A[-1]), label = "A", alpha = 0.5)
-    plt.plot(np.abs(record_waveform_B[-1]), label = "B", alpha = 0.5)
+    plt.plot(np.abs(record_waveform_A[-1]), label = "A", alpha = 0.7)
+    plt.plot(np.abs(record_waveform_B[-1]), label = "B", alpha = 0.7)
     plt.title("Final Waveform")
     plt.xlabel("mode number")
     plt.ylabel("amplitude")
@@ -118,8 +118,8 @@ def result_plot(record_power_A, record_power_B, record_waveform_A, record_wavefo
 
     # plot final spectrum, with mode number as horizontal axis
     plt.figure()
-    plt.plot(np.abs(record_freq_A[-1]), label = "A", alpha = 0.5)
-    plt.plot(np.abs(record_freq_B[-1]), label = "B", alpha = 0.5)
+    plt.plot(np.abs(record_freq_A[-1]), label = "A", alpha = 0.7)
+    plt.plot(np.abs(record_freq_B[-1]), label = "B", alpha = 0.7)
     plt.title("Final Spectrum")
     plt.xlabel("mode number")
     plt.ylabel("amplitude")
@@ -187,13 +187,13 @@ if plot_flag:
     fig.set_size_inches(5, 7)
     # fig.canvas.manager.window.resizable(True, True)
     ax, ax_freq, ax_phase_A, ax_phase_B = axs[0], axs[1], axs[2], axs[3]
-    line_A, = ax.plot(np.abs(A))
-    line_B, = ax.plot(np.abs(B))
+    line_A, = ax.plot(np.abs(A), alpha = 0.7)
+    line_B, = ax.plot(np.abs(B), alpha = 0.7)
     xs_freq = np.arange(-mode_number / 2, mode_number / 2)
-    line_A_freq, = ax_freq.plot(xs_freq, np.abs(A_freq))
-    line_B_freq, = ax_freq.plot(xs_freq, np.abs(B_freq))
-    line_A_phase, = ax_phase_A.plot(np.angle(A))
-    line_B_phase, = ax_phase_B.plot(np.angle(B))
+    line_A_freq, = ax_freq.plot(xs_freq, np.abs(A_freq), alpha = 0.7)
+    line_B_freq, = ax_freq.plot(xs_freq, np.abs(B_freq), alpha = 0.7)
+    line_A_phase, = ax_phase_A.plot(np.angle(A), alpha = 0.7)
+    line_B_phase, = ax_phase_B.plot(np.angle(B), alpha = 0.7)
 
 print("Start main loop")
 if cProfile_test:
