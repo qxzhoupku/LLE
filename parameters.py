@@ -27,6 +27,7 @@ D_int = np.fft.ifftshift(D_int)
 time_str = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
 
 random_seed = np.random.randint(0, 2**32)
+# random_seed = 4125589608
 rng = np.random.default_rng(random_seed)
 
 
