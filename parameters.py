@@ -7,8 +7,8 @@ iter_number = 10**8
 plot_interval = 5000
 record_interval = iter_number // 10000
 # zeta is changing every single iteration
-zeta_ini = +5.0 - 0.0001
-zeta_end = +10.0 + 0.0001
+zeta_ini = +6.2  - 0.0001
+zeta_end = +7.0 + 0.0001
 zetas = np.linspace(zeta_ini, zeta_end, iter_number)
 
 f_A = 3
@@ -16,6 +16,9 @@ f_B = 0
 delta_t = 1e-4 # commonly used time step
 delta_t = 1e-5
 J_back_r = 2.85
+
+seed_number = -1
+seed_number = 1
 
 
 D_int = np.zeros(mode_number, dtype=np.complex128)

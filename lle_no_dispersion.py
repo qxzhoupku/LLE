@@ -2,10 +2,11 @@ import numpy as np
 from numba import jit, objmode
 import matplotlib.pyplot as plt
 import os
+import glob
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag # type: ignore
+from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number # type: ignore
 
 # import sys
 # import time
@@ -94,8 +95,15 @@ def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_
 
 
 # Initialization
-A = noise(mode_number, rng) * 0.0001
-B = noise(mode_number, rng) * 0.0001
+if seed_number != -1:
+    # load seed
+    file_seed_A = glob.glob(f"../seeds/seed_{seed_number}_A_*.npy")[0]
+    file_seed_B = glob.glob(f"../seeds/seed_{seed_number}_B_*.npy")[0]
+    A = np.load(file_seed_A)
+    B = np.load(file_seed_B)
+else:
+    A = noise(mode_number, rng) * 0.0001
+    B = noise(mode_number, rng) * 0.0001
 A_freq = np.fft.fftshift(np.fft.fft(A))
 B_freq = np.fft.fftshift(np.fft.fft(B))
 
