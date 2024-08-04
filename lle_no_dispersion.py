@@ -44,6 +44,28 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
     return A_4
 
 
+################
+# Main loop
+def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng):
+    for i in tqdm(range(iter_number), desc="Processing"):
+        zeta = zetas[i]
+        power_A = cal_power(A)
+        power_B = cal_power(B)
+        record_power_A[i] = power_A
+        record_power_B[i] = power_B
+        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, power_B, J_back_r, noise_flag, rng)
+        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, power_A, J_back_r, noise_flag, rng)
+        A, B = A_new, B_new
+
+        if i % record_interval == 0:
+            record_waveform_A[i // record_interval] = A
+            record_waveform_B[i // record_interval] = B
+
+        if i % plot_interval == 0 and plot_flag == True:
+            figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
+################
+
+
 def figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq):
     line_A.set_ydata(np.abs(A))
     line_B.set_ydata(np.abs(B))
@@ -149,27 +171,6 @@ if plot_flag:
     line_A_phase, = ax_phase_A.plot(np.angle(A))
     line_B_phase, = ax_phase_B.plot(np.angle(B))
 
-################
-# Main loop
-def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng):
-    for i in tqdm(range(iter_number), desc="Processing"):
-        zeta = zetas[i]
-        power_A = cal_power(A)
-        power_B = cal_power(B)
-        record_power_A[i] = power_A
-        record_power_B[i] = power_B
-        A_new = split_step(A, zeta, f_A, D_int, delta_t, B, power_B, J_back_r, noise_flag, rng)
-        B_new = split_step(B, zeta, f_B, D_int, delta_t, A, power_A, J_back_r, noise_flag, rng)
-        A, B = A_new, B_new
-
-        if i % record_interval == 0:
-            record_waveform_A[i // record_interval] = A
-            record_waveform_B[i // record_interval] = B
-
-        if i % plot_interval == 0 and plot_flag == True:
-            figure_plot(A, B, i, zeta, ax, ax_freq, line_A, line_B, line_A_freq, line_B_freq)
-################
-
 print("Start main loop")
 if cProfile_test:
     cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng)", f"{time_str}_profile.prof")
@@ -181,6 +182,5 @@ plt.ioff()
 
 # store D_int
 np.savetxt(f"{time_str}_D_int.txt", D_int)
-
 
 result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end)
