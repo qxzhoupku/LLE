@@ -4,13 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end):
-    iter_number = len(zetas)
-    power_interval = max(iter_number // 10000000, 1)
+def result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval):
     # Plot power
     plt.figure()
-    plt.plot(zetas[::power_interval], record_power_A[::power_interval], label=f'Power A, f_A = {f_A}', alpha = 0.7)
-    plt.plot(zetas[::power_interval], record_power_B[::power_interval], label=f'Power B, f_B = {f_B}', alpha = 0.7)
+    plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}', alpha = 0.7)
+    plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}', alpha = 0.7)
     plt.xlim(zeta_ini, zeta_end)
     plt.title(f"Power, J = {J_back_r}")
     plt.xlabel("detuning")
@@ -93,10 +91,10 @@ record_power_A = np.load(f"{time_str}_record_power_A.npy")
 record_power_B = np.load(f"{time_str}_record_power_B.npy")
 record_waveform_A = np.load(f"{time_str}_record_waveform_A.npy")
 record_waveform_B = np.load(f"{time_str}_record_waveform_B.npy")
-zetas = np.load(f"{time_str}_zetas.npy")
-time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
+time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
+zetas = np.linspace(zeta_ini, zeta_end, iter_number * power_interval)
 
 os.chdir("../output")
 
-result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end)
+result_plot(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval)
 
