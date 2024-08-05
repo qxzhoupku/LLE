@@ -92,9 +92,9 @@ record_power_B = np.load(f"{time_str}_record_power_B.npy")
 record_waveform_A = np.load(f"{time_str}_record_waveform_A.npy")
 record_waveform_B = np.load(f"{time_str}_record_waveform_B.npy")
 time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
-zetas = np.linspace(zeta_ini, zeta_end, iter_number // power_interval)
-print(len(zetas))
-print(len(record_power_A))
+zetas = np.load(f"{time_str}_zetas.npy")
+print("length of zetas:", len(zetas))
+print("length of record_waveform:", len(record_waveform_A))
 
 os.chdir("../output")
 

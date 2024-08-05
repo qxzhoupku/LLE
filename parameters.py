@@ -10,7 +10,7 @@ power_interval = max(iter_number // 1000000, 1)
 # zeta is changing every single iteration
 zeta_ini = +5.0 - 0.0001
 zeta_end = +7.0 + 0.0001
-zetas = np.linspace(zeta_ini, zeta_end, iter_number)
+zeta_step = (zeta_end - zeta_ini) / (iter_number - 1)
 
 f_A = 3
 f_B = 0
