@@ -6,7 +6,7 @@ import glob
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number # type: ignore
+from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zetas, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number, power_interval # type: ignore
 
 # import sys
 # import time
@@ -51,17 +51,19 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
 ################
 # Main loop
 @jit(nopython=True)
-def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B):
+def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B, power_interval):
     # for i in tqdm(range(iter_number), desc="Processing"):
     for i in range(iter_number):
         zeta = zetas[i]
         power_A = cal_power(A)
         power_B = cal_power(B)
-        record_power_A[i] = power_A
-        record_power_B[i] = power_B
         A_new = split_step(A, zeta, f_A, D_int, delta_t, B, power_B, J_back_r, noise_flag, rng)
         B_new = split_step(B, zeta, f_B, D_int, delta_t, A, power_A, J_back_r, noise_flag, rng)
         A, B = A_new, B_new
+
+        if i % power_interval == 0:
+            record_power_A[i] = power_A
+            record_power_B[i] = power_B
 
         if i % record_interval == 0:
             record_waveform_A[i // record_interval] = A
@@ -110,8 +112,8 @@ else:
 A_freq = np.fft.fftshift(np.fft.fft(A))
 B_freq = np.fft.fftshift(np.fft.fft(B))
 
-record_power_A = np.zeros(iter_number)
-record_power_B = np.zeros(iter_number)
+record_power_A = np.zeros(iter_number // power_interval)
+record_power_B = np.zeros(iter_number // power_interval)
 record_waveform_A = np.zeros((iter_number // record_interval, mode_number), dtype=np.complex128)
 record_waveform_B = np.zeros((iter_number // record_interval, mode_number), dtype=np.complex128)
 
@@ -131,9 +133,9 @@ if plot_flag:
 
 print("Start main loop")
 if cProfile_test:
-    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)", f"{time_str}_profile.prof")
+    cProfile.run("main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B, power_interval)", f"{time_str}_profile.prof")
 else:
-    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B)
+    main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B, power_interval)
 print("End main loop")
 
 plt.ioff()
@@ -147,7 +149,7 @@ np.save(f"{time_str}_record_power_A.npy", record_power_A)
 np.save(f"{time_str}_record_power_B.npy", record_power_B)
 np.save(f"{time_str}_record_waveform_A.npy", record_waveform_A)
 np.save(f"{time_str}_record_waveform_B.npy", record_waveform_B)
-np.save(f"{time_str}_parameters.npy", np.array([time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end], dtype=object))
+np.save(f"{time_str}_parameters.npy", np.array([time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval], dtype=object))
 os.chdir(output_path)
 print("Results saved")
 

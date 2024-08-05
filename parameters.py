@@ -6,6 +6,7 @@ mode_number = 2**8
 iter_number = 10**8
 plot_interval = 5000
 record_interval = iter_number // 10000
+power_interval = max(iter_number // 1000000, 1)
 # zeta is changing every single iteration
 zeta_ini = +5.0 - 0.0001
 zeta_end = +7.0 + 0.0001
