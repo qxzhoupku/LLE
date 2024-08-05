@@ -41,7 +41,7 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
     A_3 = np.exp((-1 + 1j * (-zeta + np.abs(A_0)**2 + B_avg_pow)) * delta_t) * A_0 + f * delta_t
     A_4 = A_3 + 1j * J_back_r * delta_t * B # backscattering term from backwards mode
     if noise_flag:
-        A_4 += noise(mode_number, rng) * 0.0001
+        A_4 += noise(mode_number, rng) * 1e-4
     return A_4
 
 
@@ -107,8 +107,8 @@ if seed_number != -1:
     A = np.load(file_seed_A)
     B = np.load(file_seed_B)
 else:
-    A = noise(mode_number, rng) * 0.0001
-    B = noise(mode_number, rng) * 0.0001
+    A = noise(mode_number, rng) * 1e-4
+    B = noise(mode_number, rng) * 1e-4
 A_freq = np.fft.fftshift(np.fft.fft(A))
 B_freq = np.fft.fftshift(np.fft.fft(B))
 
