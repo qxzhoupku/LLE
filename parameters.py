@@ -8,8 +8,8 @@ plot_interval = 5000
 record_interval = iter_number // 10000
 power_interval = max(iter_number // 1000000, 1)
 # zeta is changing every single iteration
-zeta_ini = +5.0 - 0.0001
-zeta_end = +7.0 + 0.0001
+zeta_ini = -0.5 - 0.0001
+zeta_end = -0.5 + 0.0001
 zeta_step = (zeta_end - zeta_ini) / (iter_number - 1)
 
 f_A = 3
@@ -19,7 +19,7 @@ delta_t = 1e-5
 J_back_r = 2.85
 
 seed_number = -1
-# seed_number = 1
+# seed_number = 2
 
 
 D_int = np.zeros(mode_number, dtype=np.complex128)
@@ -40,7 +40,7 @@ plot_flag = False
 cProfile_test = False
 # cProfile_test = True
 noise_flag = False
-# noise_flag = True
+noise_flag = True
 
 
 
