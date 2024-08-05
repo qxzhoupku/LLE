@@ -62,8 +62,8 @@ def main_loop(iter_number, plot_interval, record_interval, zetas, A, B, f_A, f_B
         A, B = A_new, B_new
 
         if i % power_interval == 0:
-            record_power_A[i] = power_A
-            record_power_B[i] = power_B
+            record_power_A[i // power_interval] = power_A
+            record_power_B[i // power_interval] = power_B
 
         if i % record_interval == 0:
             record_waveform_A[i // record_interval] = A
