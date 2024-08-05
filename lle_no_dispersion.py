@@ -106,9 +106,11 @@ if seed_number != -1:
     file_seed_B = glob.glob(f"../seeds/seed_{seed_number}_B_*.npy")[0]
     A = np.load(file_seed_A)
     B = np.load(file_seed_B)
+    print(f"Seed loaded: {file_seed_A}, {file_seed_B}")
 else:
     A = noise(mode_number, rng) * 1e-4
     B = noise(mode_number, rng) * 1e-4
+    print("Start from random noise")
 A_freq = np.fft.fftshift(np.fft.fft(A))
 B_freq = np.fft.fftshift(np.fft.fft(B))
 
