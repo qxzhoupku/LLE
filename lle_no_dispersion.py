@@ -6,7 +6,7 @@ import glob
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zeta_step, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number, power_interval # type: ignore
+from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zeta_step, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number, power_interval, noise_level # type: ignore
 
 # import sys
 # import time
@@ -21,9 +21,9 @@ os.chdir(output_path)
 
 
 @jit(nopython=True)
-def noise(mode_number, rng):
+def noise(mode_number, rng, noise_level = noise_level):
     white_noise = rng.standard_normal(mode_number) + 1j * rng.standard_normal(mode_number)
-    return white_noise * 1e-4
+    return white_noise * noise_level
     # smooth_noise = gaussian_filter1d(white_noise, sigma=10)
     # return smooth_noise
     # # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
