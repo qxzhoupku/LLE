@@ -23,7 +23,7 @@ os.chdir(output_path)
 @jit(nopython=True)
 def noise(mode_number, rng):
     white_noise = rng.standard_normal(mode_number) + 1j * rng.standard_normal(mode_number)
-    return white_noise
+    return white_noise * 1e-4
     # smooth_noise = gaussian_filter1d(white_noise, sigma=10)
     # return smooth_noise
     # # return np.random.random(mode_number) * np.exp(1j * np.random.random(mode_number)) / 2
@@ -44,7 +44,7 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
     A_3 = A_2 + f * delta_t
     A_4 = A_3 + 1j * J_back_r * delta_t * B # backscattering term from backwards mode
     if noise_flag:
-        A_4 += noise(mode_number, rng) * 1e-4
+        A_4 += noise(mode_number, rng)
     return A_4
 
 
@@ -111,8 +111,8 @@ if seed_number != -1:
     B = np.load(file_seed_B)
     print(f"Seed loaded: {file_seed_A}, {file_seed_B}")
 else:
-    A = noise(mode_number, rng) * 1e-4
-    B = noise(mode_number, rng) * 1e-4
+    A = noise(mode_number, rng)
+    B = noise(mode_number, rng)
     print("Start from random noise")
 A_freq = np.fft.fftshift(np.fft.fft(A))
 B_freq = np.fft.fftshift(np.fft.fft(B))
