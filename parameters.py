@@ -21,7 +21,7 @@ J_back_r = 2.85
 noise_level = 1e-6
 
 seed_number = -1
-# seed_number = 8
+# seed_number = 7
 
 
 D_int = np.zeros(mode_number, dtype=np.complex128)
