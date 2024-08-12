@@ -71,8 +71,7 @@ def result_plot(record_power_A, record_power_B, record_waveform_A, record_wavefo
     print("Frequency_A saved")
 
     plt.figure()
-    plt.imshow(np.abs(record_freq_B), aspect='auto', \
-            extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    plt.imshow(np.abs(record_freq_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
     # plt.colorbar()
     plt.title("Frequency_B")
     plt.xlabel("detuning")
