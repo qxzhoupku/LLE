@@ -38,7 +38,7 @@ def cal_power(x):
 
 @jit(nopython=True)
 def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_flag=False, rng = rng):
-    A_3 = np.exp((-1 + 1j * (-zeta + np.abs(A_0)**2 + B_avg_pow)) * delta_t) * A_0 + f * delta_t
+    A_3 = np.exp((-1 + 1j * (-zeta + np.abs(A_0)**2 + 2 * B_avg_pow)) * delta_t) * A_0 + f * delta_t
     A_4 = A_3 + 1j * J_back_r * delta_t * B # backscattering term from backwards mode
     if noise_flag:
         A_4 += noise(mode_number, rng)

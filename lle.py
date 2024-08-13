@@ -38,7 +38,7 @@ def cal_power(x):
 
 @jit(nopython=True)
 def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_flag=False, rng = rng):
-    A_1 = np.exp(1j * (np.abs(A_0)**2 + B_avg_pow) * delta_t) * A_0
+    A_1 = np.exp(1j * (np.abs(A_0)**2 + 2 * B_avg_pow) * delta_t) * A_0
     A_1_freq = np.fft.fft(A_1)
     A_2_freq = np.exp(-(1 + 1j * zeta + 1j * D_int) * delta_t) * A_1_freq
     A_2 = np.fft.ifft(A_2_freq)
