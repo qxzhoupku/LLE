@@ -3,6 +3,7 @@ from numba import jit, objmode
 import matplotlib.pyplot as plt
 import os, sys
 import glob
+import time
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
@@ -84,7 +85,7 @@ zetas = np.zeros(iter_number // power_interval)
 record_power_A = np.zeros(iter_number // power_interval)
 record_power_B = np.zeros(iter_number // power_interval)
 
-
+start_time = time.time()
 
 print("Start main loop")
 if cProfile_test:
@@ -92,6 +93,10 @@ if cProfile_test:
 else:
     main_loop(iter_number, zeta_ini, zeta_step, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, power_interval)
 print("End main loop")
+
+end_time = time.time()
+
+print(f"Time used: {end_time - start_time:.2f} s")
 
 plt.ioff()
 

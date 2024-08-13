@@ -3,6 +3,7 @@ from numba import jit, objmode
 import matplotlib.pyplot as plt
 import os
 import glob
+import time
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
@@ -133,12 +134,18 @@ if plot_flag:
     line_A_phase, = ax_phase_A.plot(np.angle(A), alpha = 0.7)
     line_B_phase, = ax_phase_B.plot(np.angle(B), alpha = 0.7)
 
+start_time = time.time()
+
 print("Start main loop")
 if cProfile_test:
     cProfile.run("main_loop(iter_number, plot_interval, record_interval, zeta_ini, zeta_step, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B, power_interval)", f"{time_str}_profile.prof")
 else:
     main_loop(iter_number, plot_interval, record_interval, zeta_ini, zeta_step, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B, power_interval)
 print("End main loop")
+
+end_time = time.time()
+
+print(f"Time used: {end_time - start_time:.2f} s")
 
 plt.ioff()
 
