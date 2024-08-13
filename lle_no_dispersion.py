@@ -37,7 +37,6 @@ def cal_power(x):
 
 @jit(nopython=True)
 def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_flag=False, rng = rng):
-    B_avg_pow = cal_power(B)
     A_3 = np.exp((-1 + 1j * (-zeta + np.abs(A_0)**2 + B_avg_pow)) * delta_t) * A_0 + f * delta_t
     A_4 = A_3 + 1j * J_back_r * delta_t * B # backscattering term from backwards mode
     if noise_flag:
@@ -49,8 +48,8 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
 # Main loop
 @jit(nopython=True)
 def main_loop(iter_number, plot_interval, record_interval, zeta_ini, zeta_step, zetas, A, B, f_A, f_B, D_int, delta_t, J_back_r, noise_flag, rng, record_power_A, record_power_B, record_waveform_A, record_waveform_B, power_interval):
-    # for i in tqdm(range(iter_number), desc="Processing"):
     zeta = zeta_ini - zeta_step
+    # for i in tqdm(range(iter_number), desc="Processing"):
     for i in range(iter_number):
         zeta = zeta + zeta_step
         power_A = cal_power(A)
