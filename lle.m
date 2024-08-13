@@ -28,7 +28,7 @@ rng('shuffle');
 random_seed = randi([0, 2^32]);
 rng(random_seed);
 
-noise_flag = false;
+noise_flag = true;
 
 % Create the output directory if it does not exist
 output_dir = fullfile(pwd, '../output');
@@ -48,7 +48,7 @@ function power = cal_power(x)
     power = sum(abs(x).^2) / mode_number;
 end
 
-function A_4 = split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r, noise_flag)
+function A_4 = split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r, noise_flag, mode_number)
     A_1 = exp(1i * (abs(A_0).^2 + B_avg_pow) * delta_t) .* A_0;
     A_1_freq = fft(A_1);
     A_2_freq = exp(-(1 + 1i * zeta + 1i * D_int) * delta_t) .* A_1_freq;
@@ -73,14 +73,15 @@ record_waveform_B = zeros(iter_number / record_interval, mode_number) + 1i * zer
 
 disp('Start main loop');
 % Main loop
+time_str = datetime("now");
 for i = 1:iter_number
     zeta = zetas(i);
     power_A = cal_power(A);
     power_B = cal_power(B);
     record_power_A(i) = power_A;
     record_power_B(i) = power_B;
-    A_new = split_step(A, zeta, f_A, D_int, delta_t, B, power_B, J_back_r, noise_flag);
-    B_new = split_step(B, zeta, f_B, D_int, delta_t, A, power_A, J_back_r, noise_flag);
+    A_new = split_step(A, zeta, f_A, D_int, delta_t, B, power_B, J_back_r, noise_flag, mode_number);
+    B_new = split_step(B, zeta, f_B, D_int, delta_t, A, power_A, J_back_r, noise_flag, mode_number);
     A = A_new;
     B = B_new;
 
@@ -89,6 +90,9 @@ for i = 1:iter_number
         record_waveform_B(floor(i / record_interval), :) = B;
     end
 end
+% time
+time_cost = datetime("now") - time_str;
+disp(time_cost);
 disp('End main loop');
 
 
