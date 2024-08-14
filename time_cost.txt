@@ -1,0 +1,10 @@
+mode_number, iter_number, noise_flag, time(s)
+
+2^8, 10^6, False,	19
+2^8, 10^6, True,	25
+2^8, 10^7, False,	181
+2^8, 10^7, True,	238
+2^8, 10^8, False,	1769
+2^8, 10^8, True,	2356
+2^8, 10^9, False,	17480
+2^8, 10^9, True,	23480
