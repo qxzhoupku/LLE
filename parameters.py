@@ -9,7 +9,7 @@ record_interval = iter_number // 10000
 power_interval = max(iter_number // 1000000, 1)
 # zeta is changing every single iteration
 zeta_ini = -5 - 0.0001
-zeta_end = +20 + 0.0001
+zeta_end = +15 + 0.0001
 zeta_step = (zeta_end - zeta_ini) / (iter_number - 1)
 
 f_A = 8
@@ -21,7 +21,7 @@ J_back_r = 2.85
 noise_level = 1e-6
 
 seed_number = -1
-## seed_number = 8
+# seed_number = 8
 
 
 D_int = np.zeros(mode_number, dtype=np.complex128)

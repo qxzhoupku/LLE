@@ -1,0 +1,10 @@
+mode_number, iter_number, noise_flag, time
+
+2^8, 10^6, False,	19s | 0.32min
+2^8, 10^6, True,	25s | 0.42min
+2^8, 10^7, False,	181s | 3.02min
+2^8, 10^7, True,	238s | 3.97min
+2^8, 10^8, False,	1769s | 29.48min
+2^8, 10^8, True,	2356s | 39.27min
+2^8, 10^9, False,	17480s | 291.33min
+2^8, 10^9, True,	23480s | 391.33min
