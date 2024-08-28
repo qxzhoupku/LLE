@@ -41,26 +41,26 @@ def result_view(record_power_A, record_power_B, record_waveform_A, record_wavefo
 
     plt.figure()
     plt.imshow(np.abs(record_waveform_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-    plt.colorbar()
+    # plt.colorbar()
     plt.title("Waveform_A")
     plt.xlabel("detuning")
 
     plt.figure()
     plt.imshow(np.abs(record_waveform_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-    plt.colorbar()
+    # plt.colorbar()
     plt.title("Waveform_B")
     plt.xlabel("detuning")
 
     # plot the frequency in a heatmap
     plt.figure()
     plt.imshow(np.abs(record_freq_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-    plt.colorbar()
+    # plt.colorbar()
     plt.title("Frequency_A")
     plt.xlabel("detuning")
 
     plt.figure()
     plt.imshow(np.abs(record_freq_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
-    plt.colorbar()
+    # plt.colorbar()
     plt.title("Frequency_B")
     plt.xlabel("detuning")
 

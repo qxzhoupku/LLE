@@ -48,7 +48,7 @@ def result_plot(record_power_A, record_power_B, zetas, time_str, f_A, f_B, J_bac
     plt.title(f"Power, J = {J_back_r}")
     plt.xlabel("detuning")
     plt.legend()
-    plt.savefig(f"{time_str}_power.png", dpi=600)
+    plt.savefig(f"{time_str}_power_slow_time.png", dpi=600)
     print("Power saved")
     plt.show()
 
