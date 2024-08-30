@@ -56,7 +56,7 @@ function A_4 = split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r, 
     A_3 = A_2 + f * delta_t;
     A_4 = A_3 + 1i * J_back_r * delta_t * B;
     if noise_flag
-        A_4 = A_4 + noise(mode_number) * 0.0001;
+        A_4 = A_4 + noise(mode_number) * delta_t;
     end
 end
 

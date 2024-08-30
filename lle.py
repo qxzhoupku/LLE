@@ -45,7 +45,7 @@ def split_step(A_0, zeta, f, D_int, delta_t, B, B_avg_pow, J_back_r=0, noise_fla
     A_3 = A_2 + f * delta_t
     A_4 = A_3 + 1j * J_back_r * delta_t * B # backscattering term from backwards mode
     if noise_flag:
-        A_4 += noise(mode_number, rng)
+        A_4 += noise(mode_number, rng) * delta_t
     return A_4
 
 
