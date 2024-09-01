@@ -54,7 +54,7 @@ while True:
     line_A_freq.set_ydata(np.abs(record_freq_A[iter]))
     line_B_freq.set_ydata(np.abs(record_freq_B[iter]))
     ax_freq.set_ylim(0, 1.1 * max(np.abs(record_freq_A[iter]).max(), np.abs(record_freq_B[iter]).max()))
-    detuning = zetas[iter]
+    detuning = zetas[iter * power_interval]
     plt.title(f"Iteration: {iter}, detuning: {detuning:.2f}")
     plt.draw()
 
