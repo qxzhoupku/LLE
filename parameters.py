@@ -2,21 +2,22 @@ import numpy as np
 import os
 import time
 
-mode_number = 2**8
+mode_number = 2**10
 iter_number = 10**8
 plot_interval = 5000
 record_interval = iter_number // 10000
 power_interval = max(iter_number // 1000000, 1)
 # zeta is changing every single iteration
-zeta_ini = -4 - 0.0001
-zeta_end = +6 + 0.0001
+zeta_ini = -5 - 0.0001
+zeta_end = +0.5 + 0.0001
 zeta_step = (zeta_end - zeta_ini) / (iter_number - 1)
 
 f_A = 5
 f_B = 0
+d_2 = 0.04
 delta_t = 1e-4 # commonly used time step
 delta_t = 1e-5
-J_back_r = 4.85
+J_back_r = 8.85
 
 noise_level = 1e-6
 
@@ -26,14 +27,14 @@ seed_number = -1
 
 D_int = np.zeros(mode_number, dtype=np.complex128)
 for i in range(mode_number):
-    D_int[i] = (i - mode_number / 2) ** 2 / 2
+    D_int[i] = (i - mode_number / 2) ** 2 * d_2
 
 D_int = np.fft.ifftshift(D_int)
 
 time_str = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
 
 random_seed = np.random.randint(0, 2**32)
-# random_seed = 4125589608
+# random_seed = 156089458
 rng = np.random.default_rng(random_seed)
 
 
