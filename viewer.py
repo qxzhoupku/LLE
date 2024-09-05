@@ -18,48 +18,32 @@ def result_view(record_power_A, record_power_B, record_waveform_A, record_wavefo
     record_freq_A = np.fft.fftshift(np.fft.fft(record_waveform_A, axis=1), axes=1)
     record_freq_B = np.fft.fftshift(np.fft.fft(record_waveform_B, axis=1), axes=1)
 
-    # plot final waveform, with mode number as horizontal axis
-    plt.figure()
-    plt.plot(np.abs(record_waveform_A[-1]), label = "A", alpha = 0.7)
-    plt.plot(np.abs(record_waveform_B[-1]), label = "B", alpha = 0.7)
-    plt.title("Final Waveform")
-    plt.xlabel("mode number")
-    plt.ylabel("amplitude")
-
-    # plot final spectrum, with mode number as horizontal axis
-    plt.figure()
-    plt.plot(np.abs(record_freq_A[-1]), label = "A", alpha = 0.7)
-    plt.plot(np.abs(record_freq_B[-1]), label = "B", alpha = 0.7)
-    plt.title("Final Spectrum")
-    plt.xlabel("mode number")
-    plt.ylabel("amplitude")
-
     record_freq_A = record_freq_A.T
     record_freq_B = record_freq_B.T
     record_waveform_A = record_waveform_A.T
     record_waveform_B = record_waveform_B.T
 
     plt.figure()
-    plt.imshow(np.abs(record_waveform_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    plt.imshow(np.abs(record_waveform_A), aspect='auto', extent=[zeta_ini, zeta_end, mode_number, 0])
     # plt.colorbar()
     plt.title("Waveform_A")
     plt.xlabel("detuning")
 
     plt.figure()
-    plt.imshow(np.abs(record_waveform_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    plt.imshow(np.abs(record_waveform_B), aspect='auto', extent=[zeta_ini, zeta_end, mode_number, 0])
     # plt.colorbar()
     plt.title("Waveform_B")
     plt.xlabel("detuning")
 
     # plot the frequency in a heatmap
     plt.figure()
-    plt.imshow(np.abs(record_freq_A), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    plt.imshow(np.abs(record_freq_A), aspect='auto', extent=[zeta_ini, zeta_end, mode_number / 2, -mode_number / 2])
     # plt.colorbar()
     plt.title("Frequency_A")
     plt.xlabel("detuning")
 
     plt.figure()
-    plt.imshow(np.abs(record_freq_B), aspect='auto', extent=[zeta_ini, zeta_end, -mode_number / 2, mode_number / 2])
+    plt.imshow(np.abs(record_freq_B), aspect='auto', extent=[zeta_ini, zeta_end, mode_number / 2, -mode_number / 2])
     # plt.colorbar()
     plt.title("Frequency_B")
     plt.xlabel("detuning")
