@@ -2,14 +2,14 @@ import numpy as np
 import os
 import time
 
-mode_number = 2**10
+mode_number = 2**8
 iter_number = 10**8
 plot_interval = 5000
 record_interval = iter_number // 10000
 power_interval = max(iter_number // 1000000, 1)
 # zeta is changing every single iteration
-zeta_ini = -5 - 0.0001
-zeta_end = +0.5 + 0.0001
+zeta_ini = +100 - 0.0001
+zeta_end = +112 + 0.0001
 zeta_step = (zeta_end - zeta_ini) / (iter_number - 1)
 
 f_A = 5
@@ -17,7 +17,7 @@ f_B = 0
 d_2 = 0.04
 delta_t = 1e-4 # commonly used time step
 delta_t = 1e-5
-J_back_r = 8.85
+J_back_r = 100
 
 noise_level = 1e-6
 
