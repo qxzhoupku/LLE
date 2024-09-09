@@ -16,6 +16,7 @@ record_freq_B = np.fft.fftshift(np.fft.fft(record_waveform_B, axis=1), axes=1)
 time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
 xs_freq = np.arange(-mode_number / 2, mode_number / 2)
 zetas = np.load(f"{time_str}_zetas.npy")
+length_zetas = len(zetas)
 
 length = len(record_waveform_A)
 print(f"Valid range: [0, {length})")
@@ -42,7 +43,7 @@ def update(val):
     line_B.set_ydata(np.abs(record_waveform_B[iter]))
     line_A_freq.set_ydata(np.abs(record_freq_A[iter]))
     line_B_freq.set_ydata(np.abs(record_freq_B[iter]))
-    detuning = zetas[iter * power_interval]
+    detuning = zetas[iter * length_zetas // length]
     plt.title(f"Iteration: {iter}, detuning: {detuning:.2f}")
     fig.canvas.draw_idle()
 
