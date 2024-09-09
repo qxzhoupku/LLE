@@ -27,10 +27,13 @@ plt.ion()
 fig, axs = plt.subplots(2)
 fig.set_size_inches(5, 7)
 ax, ax_freq = axs[0], axs[1]
-line_A, = ax.plot(np.abs(record_waveform_A[-1]), alpha = 0.7)
-line_B, = ax.plot(np.abs(record_waveform_B[-1]), alpha = 0.7)
-line_A_freq, = ax_freq.plot(xs_freq, np.abs(record_freq_A[-1]), alpha = 0.7)
-line_B_freq, = ax_freq.plot(xs_freq, np.abs(record_freq_B[-1]), alpha = 0.7)
+ax.set_ylim(0, max(np.abs(record_waveform_A).max(), np.abs(record_waveform_B).max()))
+ax_freq.set_yscale('log')
+ax_freq.set_ylim(0.3 * min(np.abs(record_freq_A[-1])[0], np.abs(record_freq_B[-1])[0]), max(np.abs(record_freq_A).max(), np.abs(record_freq_B).max()))
+line_A, = ax.plot(np.abs(record_waveform_A[0]), alpha = 0.7)
+line_B, = ax.plot(np.abs(record_waveform_B[0]), alpha = 0.7)
+line_A_freq, = ax_freq.plot(xs_freq, np.abs(record_freq_A[0]), alpha = 0.7)
+line_B_freq, = ax_freq.plot(xs_freq, np.abs(record_freq_B[0]), alpha = 0.7)
 # plt.show()
 
 length = len(record_waveform_A)
@@ -51,10 +54,8 @@ while True:
         continue
     line_A.set_ydata(np.abs(record_waveform_A[iter]))
     line_B.set_ydata(np.abs(record_waveform_B[iter]))
-    ax.set_ylim(0, 1.1 * max(np.abs(record_waveform_A[iter]).max(), np.abs(record_waveform_B[iter]).max()))
     line_A_freq.set_ydata(np.abs(record_freq_A[iter]))
     line_B_freq.set_ydata(np.abs(record_freq_B[iter]))
-    ax_freq.set_ylim(0, 1.1 * max(np.abs(record_freq_A[iter]).max(), np.abs(record_freq_B[iter]).max()))
     detuning = zetas[iter * power_interval]
     plt.title(f"Iteration: {iter}, detuning: {detuning:.2f}")
     plt.draw()
