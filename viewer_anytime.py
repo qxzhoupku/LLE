@@ -2,8 +2,8 @@ import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
-from matplotlib.widgets import Button
+from matplotlib.widgets import Slider, Button
+from matplotlib.gridspec import GridSpec
 
 
 time_str = sys.argv[1]
@@ -25,17 +25,22 @@ length_zetas = len(zetas)
 length = len(record_waveform_A)
 print(f"Valid range: [0, {length})")
 
-plt.figure().set_size_inches(5, 7)
-plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}', alpha = 0.7)
-plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}', alpha = 0.7)
-plt.xlim(zeta_ini, zeta_end)
-plt.title(f"Power, J = {J_back_r}")
-plt.xlabel("detuning")
-plt.legend(loc = "lower left")
+# 创建图形和网格布局
+# plt.ion()
+fig = plt.figure(figsize=(8, 7))  # 调整图像大小以腾出更多空间
+gs = GridSpec(2, 2, height_ratios=[1, 0.5])  # 第一、二幅图各占1/3，第三幅图占1/2
 
-fig, axs = plt.subplots(2)
-fig.set_size_inches(5, 7)
-ax, ax_freq = axs[0], axs[1]
+# 创建轴
+ax_wave = fig.add_subplot(gs[0, 0])  # 功率图
+ax_freq = fig.add_subplot(gs[0, 1])        # 第一幅图
+ax_power = fig.add_subplot(gs[1, :])        # 第二幅图
+
+# 绘制功率图
+ax_power.plot(zetas, record_power_A, label=f'f_A = {f_A}', alpha=0.7)
+ax_power.plot(zetas, record_power_B, label=f'f_B = {f_B}', alpha=0.7)
+ax_power.set_xlim(zeta_ini, zeta_end)
+ax_power.set_title(f"Power, J = {J_back_r}")
+ax_power.legend(loc="lower left", fontsize=8)
 
 # 创建滑块的子图 (位于底部，水平居中)
 ax_slider = plt.axes([0.2, 0.05, 0.65, 0.03], facecolor="lightgoldenrodyellow")
@@ -60,20 +65,20 @@ def increase(event):
 button_minus.on_clicked(decrease)
 button_plus.on_clicked(increase)
 
-ax.set_ylim(0, max(np.abs(record_waveform_A).max(), np.abs(record_waveform_B).max()))
+ax_wave.set_ylim(0, max(np.abs(record_waveform_A).max(), np.abs(record_waveform_B).max()))
 ax_freq.set_yscale('log')
 ax_freq.set_ylim(0.3 * min(np.abs(record_freq_A[-1])[0], np.abs(record_freq_B[-1])[0]), max(np.abs(record_freq_A).max(), np.abs(record_freq_B).max()))
 
-line_A, = ax.plot(np.abs(record_waveform_A[0]), alpha=0.7)
-line_B, = ax.plot(np.abs(record_waveform_B[0]), alpha=0.7)
-ax.set_title(f"Iteration: {0}, detuning: {zetas[0]:.2f}")
+line_A, = ax_wave.plot(np.abs(record_waveform_A[0]), alpha=0.7)
+line_B, = ax_wave.plot(np.abs(record_waveform_B[0]), alpha=0.7)
+ax_wave.set_title(f"Iteration: {0}, detuning: {zetas[0]:.2f}")
 line_A_freq, = ax_freq.plot(xs_freq, np.abs(record_freq_A[0]), alpha=0.7)
 line_B_freq, = ax_freq.plot(xs_freq, np.abs(record_freq_B[0]), alpha=0.7)
 
 def update(val):
     iter = int(slider.val)
     detuning = zetas[iter * length_zetas // length]
-    ax.set_title(f"Iteration: {iter}, detuning: {detuning:.2f}")
+    ax_wave.set_title(f"Iteration: {iter}, detuning: {detuning:.2f}")
     line_A.set_ydata(np.abs(record_waveform_A[iter]))
     line_B.set_ydata(np.abs(record_waveform_B[iter]))
     line_A_freq.set_ydata(np.abs(record_freq_A[iter]))
@@ -81,4 +86,6 @@ def update(val):
     fig.canvas.draw_idle()
 
 slider.on_changed(update)
+
+plt.subplots_adjust(hspace=0.3, bottom=0.16)
 plt.show()
