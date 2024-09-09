@@ -31,9 +31,9 @@ fig = plt.figure(figsize=(8, 7))  # 调整图像大小以腾出更多空间
 gs = GridSpec(2, 2, height_ratios=[1, 0.5])  # 第一、二幅图各占1/3，第三幅图占1/2
 
 # 创建轴
-ax_wave = fig.add_subplot(gs[0, 0])  # 功率图
-ax_freq = fig.add_subplot(gs[0, 1])        # 第一幅图
-ax_power = fig.add_subplot(gs[1, :])        # 第二幅图
+ax_wave = fig.add_subplot(gs[0, 0])  # 第一幅图
+ax_freq = fig.add_subplot(gs[0, 1])        # 第二幅图
+ax_power = fig.add_subplot(gs[1, :])        # 功率图
 
 # 绘制功率图
 ax_power.plot(zetas, record_power_A, label=f'f_A = {f_A}', alpha=0.7)
@@ -41,6 +41,9 @@ ax_power.plot(zetas, record_power_B, label=f'f_B = {f_B}', alpha=0.7)
 ax_power.set_xlim(zeta_ini, zeta_end)
 ax_power.set_title(f"Power, J = {J_back_r}")
 ax_power.legend(loc="lower left", fontsize=8)
+# 在功率图中添加竖线
+detuning_line = ax_power.axvline(x=zetas[0], color='red', linestyle='--')
+ax_power.legend(loc="lower left", fontsize='small')
 
 # 创建滑块的子图 (位于底部，水平居中)
 ax_slider = plt.axes([0.2, 0.05, 0.65, 0.03], facecolor="lightgoldenrodyellow")
@@ -83,6 +86,7 @@ def update(val):
     line_B.set_ydata(np.abs(record_waveform_B[iter]))
     line_A_freq.set_ydata(np.abs(record_freq_A[iter]))
     line_B_freq.set_ydata(np.abs(record_freq_B[iter]))
+    detuning_line.set_xdata([detuning, detuning])
     fig.canvas.draw_idle()
 
 slider.on_changed(update)
