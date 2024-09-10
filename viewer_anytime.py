@@ -28,7 +28,7 @@ print(f"Valid range: [0, {length})")
 # 创建图形和网格布局
 # plt.ion()
 fig = plt.figure(figsize=(8, 7))  # 调整图像大小以腾出更多空间
-gs = GridSpec(2, 2, height_ratios=[1, 0.5])  # 第一、二幅图各占1/3，第三幅图占1/2
+gs = GridSpec(2, 2, height_ratios=[1, 0.7])  # 第一、二幅图各占1/3，第三幅图占1/2
 
 # 创建轴
 ax_wave = fig.add_subplot(gs[0, 0])  # 第一幅图
