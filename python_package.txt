@@ -1,0 +1,6 @@
+numpy
+numba
+ipython
+ipywidgets
+matplotlib
+rocket-fft

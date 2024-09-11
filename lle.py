@@ -7,7 +7,8 @@ import time
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zeta_step, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number, power_interval, noise_level # type: ignore
+# from parameters import mode_number, iter_number, plot_interval, record_interval, zeta_ini, zeta_end, zeta_step, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, plot_flag, cProfile_test, noise_flag, seed_number, power_interval, noise_level # type: ignore
+from parameters import *
 
 # import sys
 # import time
@@ -163,7 +164,20 @@ np.save(f"{time_str}_record_power_A.npy", record_power_A)
 np.save(f"{time_str}_record_power_B.npy", record_power_B)
 np.save(f"{time_str}_record_waveform_A.npy", record_waveform_A)
 np.save(f"{time_str}_record_waveform_B.npy", record_waveform_B)
-np.save(f"{time_str}_parameters.npy", np.array([time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval], dtype=object))
+data_dict = {
+    "time_str": time_str,
+    "f_A": f_A,
+    "f_B": f_B,
+    "J_back_r": J_back_r,
+    "mode_number": mode_number,
+    "zeta_ini": zeta_ini,
+    "zeta_end": zeta_end,
+    "iter_number": iter_number,
+    "power_interval": power_interval,
+    "d_2": d_2
+}
+np.save(f"{time_str}_parameters_dict.npy", data_dict)
+# np.save(f"{time_str}_parameters.npy", np.array([time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval], dtype=object))
 os.chdir(output_path)
 print("Results saved")
 
