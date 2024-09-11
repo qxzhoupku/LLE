@@ -18,7 +18,15 @@ record_waveform_A = np.load(f"{time_str}_record_waveform_A.npy")
 record_waveform_B = np.load(f"{time_str}_record_waveform_B.npy")
 record_freq_A = np.fft.fftshift(np.fft.fft(record_waveform_A, axis=1), axes=1)
 record_freq_B = np.fft.fftshift(np.fft.fft(record_waveform_B, axis=1), axes=1)
-time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
+# time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
+data_dict = np.load(f"{time_str}_parameters_dict.npy", allow_pickle=True).item()
+f_A = data_dict["f_A"]
+f_B = data_dict["f_B"]
+J_back_r = data_dict["J_back_r"]
+mode_number = data_dict["mode_number"]
+zeta_ini = data_dict["zeta_ini"]
+zeta_end = data_dict["zeta_end"]
+d_2 = data_dict["d_2"]
 xs_freq = np.arange(-mode_number / 2, mode_number / 2)
 zetas = np.load(f"{time_str}_zetas.npy")
 length_zetas = len(zetas)
@@ -39,7 +47,7 @@ ax_power = fig.add_subplot(gs[1, :])        # 功率图
 ax_power.plot(zetas, record_power_A, label=f'f_A = {f_A}', alpha=0.7)
 ax_power.plot(zetas, record_power_B, label=f'f_B = {f_B}', alpha=0.7)
 ax_power.set_xlim(zeta_ini, zeta_end)
-ax_power.set_title(f"Power, J = {J_back_r}")
+ax_power.set_title(f"Power, J = {J_back_r}, d_2 = {d_2}")
 ax_power.legend(loc="lower left", fontsize=8)
 # 在功率图中添加竖线
 detuning_line = ax_power.axvline(x=zetas[0], color='red', linestyle='--')

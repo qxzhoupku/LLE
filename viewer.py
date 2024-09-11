@@ -4,13 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def result_view(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end):
+def result_view(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, d_2):
     # Plot power
     plt.figure()
-    plt.plot(zetas, record_power_A, label=f'Power A, f_A = {f_A}', alpha = 0.7)
-    plt.plot(zetas, record_power_B, label=f'Power B, f_B = {f_B}', alpha = 0.7)
+    plt.plot(zetas, record_power_A, label=f'f_A = {f_A}', alpha = 0.7)
+    plt.plot(zetas, record_power_B, label=f'f_B = {f_B}', alpha = 0.7)
     plt.xlim(zeta_ini, zeta_end)
-    plt.title(f"Power, J = {J_back_r}")
+    plt.title(f"Power, J = {J_back_r}, d_2 = {d_2}")
     plt.xlabel("detuning")
     plt.legend(loc = "lower left")
 
@@ -60,11 +60,19 @@ record_power_A = np.load(f"{time_str}_record_power_A.npy")
 record_power_B = np.load(f"{time_str}_record_power_B.npy")
 record_waveform_A = np.load(f"{time_str}_record_waveform_A.npy")
 record_waveform_B = np.load(f"{time_str}_record_waveform_B.npy")
-time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
+# time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, iter_number, power_interval = np.load(f"{time_str}_parameters.npy", allow_pickle=True)
+data_dict = np.load(f"{time_str}_parameters_dict.npy", allow_pickle=True).item()
+f_A = data_dict["f_A"]
+f_B = data_dict["f_B"]
+J_back_r = data_dict["J_back_r"]
+mode_number = data_dict["mode_number"]
+zeta_ini = data_dict["zeta_ini"]
+zeta_end = data_dict["zeta_end"]
+d_2 = data_dict["d_2"]
 zetas = np.load(f"{time_str}_zetas.npy")
 print("length of zetas:", len(zetas))
 print("length of record_waveform:", len(record_waveform_A))
 
 
-result_view(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end)
+result_view(record_power_A, record_power_B, record_waveform_A, record_waveform_B, zetas, time_str, f_A, f_B, J_back_r, mode_number, zeta_ini, zeta_end, d_2)
 

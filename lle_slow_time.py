@@ -7,7 +7,8 @@ import time
 from tqdm import tqdm
 from scipy.ndimage import gaussian_filter1d
 import cProfile
-from parameters import iter_number, zeta_ini, zeta_end, zeta_step, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, cProfile_test, noise_flag, power_interval, noise_level # type: ignore
+# from parameters import iter_number, zeta_ini, zeta_end, zeta_step, f_A, f_B, J_back_r, delta_t, D_int, time_str, rng, cProfile_test, noise_flag, power_interval, noise_level # type: ignore
+from parameters import *
 
 # import sys
 # import time
