@@ -5,13 +5,13 @@ import time
 
 f_A = 5
 f_B = 0
-d_2 = 0.1
+d_2 = 0.5
 J_back_r = 10.0
 noise_level = 1e-6
 
 zeta_ini = -5 - 0.0001
-zeta_end = -4 + 0.0001
-iter_number = 10**7
+zeta_end = +5 + 0.0001
+iter_number = 10**8
 mode_number = 2**8
 delta_t = 1e-5
 random_seed = np.random.randint(0, 2**32)
