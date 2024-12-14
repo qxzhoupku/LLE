@@ -12,3 +12,9 @@ Folder
 ├── output
 └── cache
 ```
+
+Dependent modules: numpy, numba, ipython, ipywidgets, matplotlib, rocket-fft
+
+The "rocket-fft" is not explicitly imported, but should be installed in the environment to support the coherent working of numpy and numba.
+
+Interactive plots are tuned for VS Code.
