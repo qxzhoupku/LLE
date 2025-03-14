@@ -3,15 +3,15 @@ import os
 import time
 
 
-f_A = 5
+f_A = 2
 f_B = 0
 d_2 = 0.01
-J_back_r = 10.0
+J_back_r = 1
 noise_level = 1e-6
 
-zeta_ini = -7 - 0.0001
-zeta_end = +0 + 0.0001
-iter_number = 10**9
+zeta_ini = +2 - 0.0001
+zeta_end = +5 + 0.0001
+iter_number = 10**7
 mode_number = 2**8
 delta_t = 1e-4
 random_seed = np.random.randint(0, 2**31)
